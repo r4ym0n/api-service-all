@@ -1,0 +1,28 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "DEBUG=server* node bin/www",
+    "dev": "DEBUG=* ./node_modules/.bin/nodemon bin/www",
+    "prd": "pm2 start bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1213.0",
+    "axios": "^0.26.1",
+    "crypto": "^1.0.1",
+    "debug": "^4.3.4",
+    "dotenv": "^8.6.0",
+    "koa": "^2.13.4",
+    "koa-bodyparser": "^4.3.0",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.0",
+    "koa-onerror": "^4.2.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
