@@ -1,6 +1,9 @@
 require('dotenv').config()
 
+
 const Koa = require('koa')
+const koaBody = require('koa-body');
+
 const app = new Koa()
 // const views = require('koa-views')
 const json = require('koa-json')
@@ -14,14 +17,19 @@ const index = require('./routes/index')
 const tmpfile = require('./routes/tmpfile')
 
 const debug = require('debug')('server:app')
+
+
+const catchError = require("./modules/errors/catchError");
+const successWarpper = require("./modules/errors/successWarpper");
+
 onerror(app)
 
 // middlewares
-app.use(json())
+app.use(catchError);
+app.use(successWarpper);
 
-app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
-}))
+app.use(json())
+app.use(koaBody({ multipart: true }));
 
 app.use(async (ctx, next)=> {
   ctx.set('Access-Control-Allow-Origin', '*');
@@ -42,8 +50,9 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-app.use(index.routes(), index.allowedMethods())
 app.use(tmpfile.routes(), tmpfile.allowedMethods())
+app.use(index.routes(), index.allowedMethods())
+
 
 // error-handling
 app.on('error', (err, ctx) => {

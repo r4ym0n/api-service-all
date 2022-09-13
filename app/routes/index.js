@@ -12,10 +12,10 @@ const debug = require('debug')('server:routes:index')
 //   }
 // })
 
-router.get('/(.*)', async function (ctx, next) {
+router.get('/', async function (ctx, next) {
   let url = ctx.url
   account = url.split('/')[1]
-  ctx.body = "test account";
+  ctx.body = "account";
   ctx.response.set("content-type", mime.lookup('xml'));
   
 })
