@@ -16,7 +16,7 @@ class MongoDB {
     constructor(dbName,collection) {
         this.collection = collection;
         this.dbName = dbName;
-        console.log(dbName, collection);
+        debug(`set dbName: ${dbName}, collection: ${collection}`);
         this.db = this.getDBConnection()
         this.cachedDb = this.db;
     }
@@ -50,7 +50,6 @@ class MongoDB {
         let dbConnection = await this.getDBConnection()
         return await dbConnection.collection(this.collection).insertOne(data)
     }
-
     async findItemByKey(key) {
         await this.getDBConnection()
         return await this.db.collection(this.collection).find(key).toArray()

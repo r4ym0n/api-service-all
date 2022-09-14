@@ -1,14 +1,8 @@
+const debug = require('debug')('server:tmpfile:MdbUtils')
+
 const MongoDB = require('../common/mongodb');
 
-class MdbUtils extends MongoDB {
-
-
-    async insertOne(data) {
-        let dbConnection = await this.getDBConnection()
-    
-        return await dbConnection.collection(this.collection).insertOne(data)
-    }
-
+class MdbUtils extends MongoDB {    
     async findItemByKey(key) {
         let dbConnection = await this.getDBConnection()
         return await dbConnection.collection(this.collection).find(key).toArray()
@@ -20,12 +14,14 @@ class MdbUtils extends MongoDB {
     }
 
     async getFileNameByCode(code) {
-        let dbConnection = await this.getDBConnection()
-        return await dbConnection.collection(this.collection).find({code: code}).toArray()
+        
+        debug("Query: " + JSON.stringify({code: code}))
+        return await this.findItemByKey({code: code})
     }
 
     async setFileCodebyName(name, code) {
-        await this.insertOne({name: name, code: code})
+        debug("insertOne: " + JSON.stringify({name: name, code: code}))
+        await this.insertOne({name: name, code: code, uploadDate: new Date()})
     };
 }
 
