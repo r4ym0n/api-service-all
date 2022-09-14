@@ -14,6 +14,8 @@ const catchError = async (ctx, next) => {
     debug(errInfo)
     // check if is known HttpException
     if (error instanceof HttpException) {
+
+      ctx.status = error.code;
       return (ctx.body = errInfo);
     } else {
       // is not , throw exception
