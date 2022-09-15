@@ -8,9 +8,9 @@ const HttpException = require("../errors/HttpException");
 // let cachedDb = null
 
 // ENV will be set by vercal automatically
-if (!process.env.MONGO_URL) {
+if (!process.env.MONGODB_URI) {
   // local dev-env
-  process.env.MONGO_URL = "mongodb://root:example@127.0.0.1:27017";
+  process.env.MONGODB_URI = "mongodb://root:example@127.0.0.1:27017";
 }
 
 class MongoDB {
@@ -18,7 +18,7 @@ class MongoDB {
     this.collection = collection;
     this.dbName = dbName;
     debug(`set dbName: ${dbName}, collection: ${collection}`);
-    this.uri = process.env.MONGO_URL;
+    this.uri = process.env.MONGODB_URI;
     this.cachedDb = null;
     // this.getDBConnection();
     
