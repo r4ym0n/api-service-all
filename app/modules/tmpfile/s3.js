@@ -4,6 +4,7 @@ const archiver = require("archiver");
 const debug = require("debug")("server:tmpfile:s3");
 const MdbUtils = require("./mdb_util");
 const HttpException = require("../errors/HttpException");
+const { throws } = require("assert");
 
 const S3_UPLOAD_TIMEOUT = 30000;
 const AWS_S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME;
@@ -29,13 +30,8 @@ async function uploadFile(ctx) {
       400
     );
   }
-
   //to handle single file and multiple files
-  const myFiles = Array.isArray(files)
-    ? files
-    : typeof files === "object"
-    ? [files]
-    : null;
+  const myFiles = Array.isArray(files)? files: typeof files === "object"? [files]: null;
   let fileCode = "";
   if (myFiles) {
     try {
@@ -49,22 +45,24 @@ async function uploadFile(ctx) {
           Body: body,
           ContentType: mimetype,
         };
-        return new Promise(function (resolve, reject) {
-          let timer = setTimeout(() => {
-            reject(new HttpException("远端上传超时", -10001, 500));
-          }, S3_UPLOAD_TIMEOUT);
 
-          s3.upload(params, function (error, data) {
-            clearTimeout(timer);
-            if (error) {
-              reject(error);
+        return mdbUtils.setFileCodebyName(originalFilename, fileCode).then(
+          function (resolve, reject) {
+            let timer = setTimeout(() => {
+              reject(new HttpException("远端上传超时", -10001, 500));
+            }, S3_UPLOAD_TIMEOUT);
+  
+            s3.upload(params, function (error, data) {
+              clearTimeout(timer);
+              if (error) {
+                reject(error);
+                return;
+              }
+              resolve(data);
               return;
-            }
-            mdbUtils.setFileCodebyName(originalFilename, fileCode);
-            resolve(data);
-            return;
-          });
-        }).catch(function (err) {
+            });
+          }
+        ).catch((err) => {
           throw err;
         });
       });
@@ -142,7 +140,10 @@ async function downloadFile(ctx) {
     Key: fileCode,
   };
 
+
   const files = await mdbUtils.getFileNameByCode(fileCode);
+  
+
   if (files.length == 0) {
     throw new HttpException("文件不存在", 10000, 404);
   } else {
