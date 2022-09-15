@@ -6,7 +6,7 @@ const MdbUtils = require("./mdb_util");
 const HttpException = require("../errors/HttpException");
 const { throws } = require("assert");
 
-const S3_UPLOAD_TIMEOUT = 30000;
+const S3_UPLOAD_TIMEOUT = 10000;
 const AWS_S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME;
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
@@ -46,12 +46,15 @@ async function uploadFile(ctx) {
           ContentType: mimetype,
         };
 
-        return mdbUtils.setFileCodebyName(originalFilename, fileCode).then(
-          function (resolve, reject) {
+        return new Promise(
+          async function (resolve, reject) {
+            await mdbUtils.setFileCodebyName(originalFilename, fileCode)
+
             let timer = setTimeout(() => {
               reject(new HttpException("远端上传超时", -10001, 500));
             }, S3_UPLOAD_TIMEOUT);
-  
+            
+
             s3.upload(params, function (error, data) {
               clearTimeout(timer);
               if (error) {
