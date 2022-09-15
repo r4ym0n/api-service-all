@@ -14,14 +14,13 @@ class MdbUtils extends MongoDB {
     }
 
     async getFileNameByCode(code) {
-        
         debug("Query: " + JSON.stringify({code: code}))
         return await this.findItemByKey({code: code})
     }
 
     async setFileCodebyName(name, code) {
         debug("insertOne: " + JSON.stringify({name: name, code: code}))
-        await this.insertOne({name: name, code: code, uploadDate: new Date()})
+        return await this.insertOne({name: name, code: code, uploadDate: new Date()})
     };
 }
 
