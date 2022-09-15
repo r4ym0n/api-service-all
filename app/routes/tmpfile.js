@@ -15,8 +15,7 @@ router.get('/download', downloadFile);
 
 router.get('/', async function (ctx, next) {
     let url = ctx.url
-    ctx.body = "tmpfile test";
+    ctx.body = router.stack.map(i => i.path)
 })
-  
 
 module.exports = router

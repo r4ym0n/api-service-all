@@ -1,4 +1,5 @@
 const router = require('koa-router')()
+const bodyParser = require('koa-bodyparser')
 const mime = require('mime-types')
 const debug = require('debug')('server:routes:index')
 
@@ -14,10 +15,7 @@ const debug = require('debug')('server:routes:index')
 
 router.get('/', async function (ctx, next) {
   let url = ctx.url
-  account = url.split('/')[1]
-  ctx.body = "account";
-  ctx.response.set("content-type", mime.lookup('xml'));
-  
+  ctx.wpbody = "not implemented";
 })
 
 module.exports = router
