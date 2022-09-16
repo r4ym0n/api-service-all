@@ -6,9 +6,9 @@ const MdbUtils = require("./mdb_util");
 const HttpException = require("../errors/HttpException");
 const { throws } = require("assert");
 
-const S3_UPLOAD_TIMEOUT = 10000;
+const S3_UPLOAD_TIMEOUT = 15000;
 const AWS_S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME;
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const MAX_FILE_SIZE = 20 * 1024 * 1024;
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
@@ -21,6 +21,10 @@ const mdbUtils = new MdbUtils("tmpfile", "data");
 async function uploadFile(ctx) {
   //myFile is the attribute/input name in your frontend app "Form-Data"
   const files = ctx.request.files.myFile;
+  if (files == undefined) {
+    throw new HttpException("invaild request format", 10001, 400);
+  }
+
 
   // check file size
   if (files.size > MAX_FILE_SIZE) {
@@ -55,12 +59,13 @@ async function uploadFile(ctx) {
             }, S3_UPLOAD_TIMEOUT);
             
 
-            s3.upload(params, function (error, data) {
+            await s3.upload(params, function (error, data) {
               clearTimeout(timer);
               if (error) {
                 reject(error);
                 return;
               }
+              debug("successfully uploaded file");
               resolve(data);
               return;
             });

@@ -6,15 +6,15 @@ const catchError = async (ctx, next) => {
   try {
     await next();
   } catch (error) {
-    let errInfo = {
-      error: error.msg,
-      code: error.code,
-      errorCode: error.errorCode
-    }
-    debug(errInfo)
+
+    console.log(error);
     // check if is known HttpException
     if (error instanceof HttpException) {
-
+      let errInfo = {
+        error: error.msg,
+        code: error.code,
+        errorCode: error.errorCode
+      }
       ctx.status = error.code;
       return (ctx.body = errInfo);
     } else {

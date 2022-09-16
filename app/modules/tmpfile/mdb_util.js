@@ -3,10 +3,6 @@ const debug = require('debug')('server:tmpfile:MdbUtils')
 const MongoDB = require('../common/mongodb');
 
 class MdbUtils extends MongoDB {    
-    async findItemByKey(key) {
-        let dbConnection = await this.getDBConnection()
-        return await dbConnection.collection(this.collection).find(key).toArray()
-    }
 
     async deleteItemByKey(key) {
         let dbConnection = await this.getDBConnection()
