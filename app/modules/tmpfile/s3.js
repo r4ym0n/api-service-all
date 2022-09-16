@@ -41,6 +41,7 @@ async function uploadFile(ctx) {
     try {
       const filePromises = myFiles.map((file) => {
         let { filepath, originalFilename, newFilename, mimetype } = file;
+        debug("file",filepath, originalFilename, newFilename, mimetype)
         const body = fs.createReadStream(filepath);
         fileCode = newFilename.slice(0, 8);
         const params = {
@@ -130,7 +131,7 @@ async function downloadArchive(ctx) {
   await archive.finalize();
   ctx.response.set(
     "Content-disposition",
-    `attachment; filename=${zipFileName}`
+    `attachment; filename=${encodeURIComponent(zipFileName)}` // fileName in ZH
   );
   ctx.body = fs.createReadStream(zipFile.path);
   fs.unlinkSync(zipFile.path);
