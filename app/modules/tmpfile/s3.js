@@ -158,7 +158,7 @@ async function downloadFile(ctx) {
   } else {
     const fileName = files[0].name;
     debug("set File name: " + fileName);
-    ctx.response.set("Content-disposition", `attachment; filename=${fileName}`);
+    ctx.response.set("Content-disposition", `attachment; filename=${encodeURIComponent(fileName)}`);
   }
 
   try {
