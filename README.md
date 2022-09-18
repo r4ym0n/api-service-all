@@ -4,4 +4,6 @@ api service for web project
 
 # TODO
 [] fix issue MongoDB connectTimeout no use
- 
+
+## tmpfile
+[] presigned to storj, otherwise file size will be limited to 4.5Mb.

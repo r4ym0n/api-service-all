@@ -184,9 +184,19 @@ async function test(ctx) {
   ctx.wpbody = fileName;
 }
 
+async function getPresigned(ctx) {
+  // s3.generate_presigned_url('put_object', Params={"Bucket":BUCKET_NAME, "Key":"path/within/bucket/file.name"}, ExpiresIn=3600)
+  const params = {
+    Bucket: `${AWS_S3_BUCKET_NAME}`,
+    Key: "1221312",
+    Expires: 3600
+  }
+  ctx.wpbody = s3.getSignedUrl('putObject', params);
+}
+
 module.exports = {
   uploadFile,
-  downloadArchive,
+  getPresigned,
   test,
   downloadFile,
 };
