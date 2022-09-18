@@ -35,13 +35,12 @@ app.use(async (ctx, next)=> {
   ctx.set('Access-Control-Allow-Origin', '*');
   ctx.set('Access-Control-Allow-Methods', '*');
   ctx.set('Access-Control-Allow-Headers', '*');
-  await next();
 
-  // if (ctx.method == 'OPTIONS') {
-  //   ctx.body = 200; 
-  // } else {
-  //   await next();
-  // }
+  if (ctx.method == 'OPTIONS') {
+    ctx.body = 200; 
+  } else {
+    await next();
+  }
 });
 
 // logger
