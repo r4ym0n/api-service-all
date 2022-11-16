@@ -1,6 +1,6 @@
 const debug = require('debug')('server:tmpfile:MdbUtils')
 
-const MongoDB = require('../common/mongodb');
+const MongoDB = require('../../utils/mongodb');
 
 class MdbUtils extends MongoDB {    
 

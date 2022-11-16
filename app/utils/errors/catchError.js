@@ -2,6 +2,7 @@ const debug = require("debug")("server:errors:catchError");
 
 const  HttpException  = require("./HttpException");
 
+// 
 const catchError = async (ctx, next) => {
   try {
     await next();

@@ -2,23 +2,22 @@
 const url = require("url");
 const MongoClient = require("mongodb").MongoClient;
 const debug = require("debug")("server:common:mongodb");
-const HttpException = require("../errors/HttpException");
+const HttpException = require("./errors/HttpException");
+
+const config = require('./config')
 
 // Create cached connection variable
 // let cachedDb = null
 
 // ENV will be set by vercal automatically
-if (!process.env.MONGODB_URI) {
-  // local dev-env
-  process.env.MONGODB_URI = "mongodb://root:example@127.0.0.1:27017";
-}
+
 
 class MongoDB {
   constructor(dbName, collection) {
     this.collection = collection;
     this.dbName = dbName;
     debug(`set dbName: ${dbName}, collection: ${collection}`);
-    this.uri = process.env.MONGODB_URI;
+    this.uri = config.MONGODB_URI;
     this.cachedDb = null;
     // this.getDBConnection();
     
@@ -26,10 +25,7 @@ class MongoDB {
 
   async connect2DB(dbName) {
     debug("Try to connect to MongoDB...");
-    // const config = {
-    //   useUnifiedTopology: true,
-    //   useNewUrlParser: true,
-    // };
+
     const config = {  connectTimeoutMS: 5000 }
     try {
       const dbClient = await MongoClient.connect(this.uri, config);
