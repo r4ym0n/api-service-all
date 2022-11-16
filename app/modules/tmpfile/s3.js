@@ -92,20 +92,20 @@ async function getDownloadStream(fileCode) {
   };
 
   const files = await mdbUtils.getFileNameByCode(fileCode);
-
+  let fileName = "";
   if (files.length == 0) {
     throw new HttpException("文件不存在", 10000, 404);
   } else {
-    const fileName = files[0].name;
+    fileName = files[0].name;
     debug("Get File name: " + fileName);
-    ctx.response.set(
-      "Content-disposition",
-      `attachment; filename=${encodeURIComponent(fileName)}`
-    );
   }
 
   try {
-    return s3.getObject(params).createReadStream();
+    return {
+      body: s3.getObject(params).createReadStream(),
+      header: `attachment; filename=${encodeURIComponent(fileName)}`
+    }
+      
   } catch (e) {
     throw new HttpException("s3 remote error", -10002, 500);
   }

@@ -67,8 +67,9 @@ router.get('/download/:fcode', async (ctx) => {
     if (fileCode === undefined) {
         throw new HttpException("missing parameter", 10001, 400);
     }
-    ctx.body = await getDownloadStream(fileCode);
-
+    let {body, header} = await getDownloadStream(fileCode);
+    ctx.body = body;
+    ctx.response.set(      "Content-disposition",header    )
 });
 
 router.get('/', async function (ctx, next) {
