@@ -85,7 +85,7 @@ async function downloadArchive(ctx) {
   fs.unlinkSync(zipFile.path);
 }
 
-async function downloadFile(ctx) {
+async function getDownloadStream(fileCode) {
   const params = {
     Bucket: `${AWS_S3_BUCKET_NAME}`,
     Key: fileCode,
@@ -105,9 +105,7 @@ async function downloadFile(ctx) {
   }
 
   try {
-    const s3Stream = s3.getObject(params).createReadStream();
-    debug("Got 3s stream");
-    ctx.body = s3Stream;
+    return s3.getObject(params).createReadStream();
   } catch (e) {
     throw new HttpException("s3 remote error", -10002, 500);
   }
@@ -126,5 +124,5 @@ async function getPresigned(ctx) {
 module.exports = {
   uploadFile,
   getPresigned,
-  downloadFile,
+  getDownloadStream,
 };
