@@ -18,6 +18,7 @@ const s3 = new AWS.S3({
 const mdbUtils = new MdbUtils("tmpfile", "data");
 
 async function uploadFile(originalFilename, fileCode, params) {
+  
   return new Promise(async function (resolve, reject) {
     await mdbUtils.setFileCodebyName(originalFilename, fileCode);
 
@@ -38,52 +39,7 @@ async function uploadFile(originalFilename, fileCode, params) {
   });
 }
 
-async function downloadArchive(ctx) {
-  const fileNames = ["file1.JPG", "file2.pdf", "file3.txt"];
 
-  const zipFileName = "myfiles.zip";
-  const zipFile = fs.createWriteStream(`./${zipFileName}`);
-  const archive = archiver("zip", {
-    zlib: { level: 9 },
-  });
-
-  archive
-    .on("warning", (err) => {
-      if (err.code === "ENOENT") {
-        // log warning
-        console.log(`File does not exist.`, err);
-      } else {
-        throw err;
-      }
-    })
-    .on("error", (err) => {
-      throw err;
-    })
-    .pipe(zipFile);
-
-  zipFile.on("close", () => {
-    console.log(archive.pointer(), "total bytes" + zipFile.path);
-    zipFile.end();
-    console.log("zip files created successfully.");
-  });
-
-  fileNames.forEach((file) => {
-    const params = {
-      Bucket: `${AWS_S3_BUCKET_NAME}`,
-      Key: file,
-    };
-    const s3Stream = s3.getObject(params).createReadStream();
-    archive.append(s3Stream, { name: file });
-  });
-
-  await archive.finalize();
-  ctx.response.set(
-    "Content-disposition",
-    `attachment; filename=${encodeURIComponent(zipFileName)}` // fileName in ZH
-  );
-  ctx.body = fs.createReadStream(zipFile.path);
-  fs.unlinkSync(zipFile.path);
-}
 
 async function getDownloadStream(fileCode) {
   const params = {

@@ -10,6 +10,7 @@ router.prefix('/tmpfile')
 
 router.post('/upload', async (ctx) => {
     const MAX_FILE_SIZE = 20 * 1024 * 1024;
+    const AWS_S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME;
 
     //myFile is the attribute/input name in your frontend app "Form-Data"
     const files = ctx.request.files.myFile;
