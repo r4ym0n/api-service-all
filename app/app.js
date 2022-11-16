@@ -26,7 +26,7 @@ onerror(app, {
     // debug(err)
     ctx.body = {
       code: err.code || ctx.status,
-      msg: err.msg,
+      msg: err.msg || err.message,
       errorCode: err.errorCode || -1,
       data: ctx.body || "",
     };
