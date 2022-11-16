@@ -4,7 +4,7 @@ const debug = require('debug')('server:routes:tmpfile')
 const HttpException = require("../utils/errors/HttpException");
 
 
-const {uploadFile,getPresigned,test, downloadFile} = require("../modules/tmpfile/s3");
+const {uploadFile,getPresigned,getDownloadStream} = require("../modules/tmpfile/s3");
 
 router.prefix('/tmpfile')
 
