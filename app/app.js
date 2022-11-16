@@ -30,7 +30,7 @@ onerror(app, {
       errorCode: err.errorCode || -1,
       data: ctx.body || "",
     };
-    ctx.status = err.code;
+    // ctx.status = err.code;
   },
 });
 

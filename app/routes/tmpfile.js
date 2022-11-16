@@ -30,7 +30,7 @@ router.post('/upload', async (ctx) => {
         const filePromises = myFiles.map((file) => {
           let { filepath, originalFilename, newFilename, mimetype } = file;
           debug("receive file",filepath, originalFilename, newFilename, mimetype)
-          
+
           fileCode = newFilename.slice(0, 8);
           const params = {
             Bucket: `${AWS_S3_BUCKET_NAME}`,
@@ -70,7 +70,6 @@ router.get('/download/:fcode', async (ctx) => {
     await downloadFile(ctx);
 
 });
-router.get('/download', downloadFile);
 
 router.get('/', async function (ctx, next) {
     let url = ctx.url
