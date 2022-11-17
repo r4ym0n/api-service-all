@@ -8,7 +8,6 @@ const config = require('./config')
 
 // Create cached connection variable
 // let cachedDb = null
-
 // ENV will be set by vercal automatically
 
 
@@ -57,13 +56,13 @@ class MongoDB {
     return await dbConnection.collection(this.collection).insertOne(data);
   }
   async findItemByKey(key) {
-    await this.getDBConnection();
-    return await this.db.collection(this.collection).find(key).toArray();
+    let dbConnection =  await this.getDBConnection();
+    return await dbConnection.collection(this.collection).find(key).toArray();
   }
 
   async deleteItemByKey(key) {
-    await this.getDBConnection();
-    this.db.collection(this.collection).deleteOne(key);
+    let dbConnection =  await this.getDBConnection();
+    dbConnection.collection(this.collection).deleteOne(key);
   }
 }
 // function factory() {

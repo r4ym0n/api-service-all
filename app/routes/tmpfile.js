@@ -2,7 +2,9 @@ const router = require('koa-router')()
 const mime = require('mime-types')
 const debug = require('debug')('server:routes:tmpfile')
 const HttpException = require("../utils/errors/HttpException");
+const fs = require("fs");
 
+const dbc = require('../utils/dbc');
 
 const {uploadFile,getPresigned,getDownloadStream} = require("../modules/tmpfile/s3");
 

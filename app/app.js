@@ -23,14 +23,14 @@ onerror(app, {
     return "json";
   },
   json(err, ctx) {
-    // debug(err)
+    debug(err.code)
     ctx.body = {
-      code: err.code || ctx.status,
+      status: err.status || ctx.status,
       msg: err.msg || err.message,
       errorCode: err.errorCode || -1,
       data: ctx.body || "",
     };
-    ctx.status = err.code || ctx.status;
+    ctx.status = err.status || ctx.status;
   },
 });
 

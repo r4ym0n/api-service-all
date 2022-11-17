@@ -25,7 +25,8 @@
     "koa-onerror": "^4.2.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
-    "mongodb": "^4.9.1"
+    "mongodb": "^4.9.1",
+    "mongoose": "^6.7.2"
   },
   "devDependencies": {
     "jest": "^29.3.1",
